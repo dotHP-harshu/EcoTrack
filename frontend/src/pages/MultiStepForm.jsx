@@ -20,13 +20,13 @@ import {
 } from "lucide-react";
 
 // Lazy load only input steps
-const Step1_Transport = lazy(() => import("./Step1_Transport"));
-const Step2_Electricity = lazy(() => import("./Step2_Electricity"));
-const Step3_Diet = lazy(() => import("./Step3_Diet"));
-const Step4_Shopping = lazy(() => import("./Step4_Shopping"));
-const Step5_Digital = lazy(() => import("./Step5_Digital"));
-const Step6_Water = lazy(() => import("./Step6_Water"));
-const ResultSummary = lazy(() => import("./ResultSummary"));
+const Step1_Transport = lazy(() => import("../components/Step1_Transport"));
+const Step2_Electricity = lazy(() => import("../components/Step2_Electricity"));
+const Step3_Diet = lazy(() => import("../components/Step3_Diet"));
+const Step4_Shopping = lazy(() => import("../components/Step4_Shopping"));
+const Step5_Digital = lazy(() => import("../components/Step5_Digital"));
+const Step6_Water = lazy(() => import("../components/Step6_Water"));
+const ResultSummary = lazy(() => import("../components/ResultSummary"));
 
 // Only 6 input steps (no result in steps array)
 const steps = [

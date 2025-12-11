@@ -1,6 +1,6 @@
 // /components/Step6_Water.jsx
 import React from "react";
-import { useFormContext } from "./MultiStepForm";
+import { useFormContext } from "../pages/MultiStepForm";
 import { Droplets } from "lucide-react";
 
 const Step6_Water = () => {

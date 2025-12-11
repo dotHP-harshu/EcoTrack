@@ -1,6 +1,6 @@
 // /components/Step4_Shopping.jsx
 import React from "react";
-import { useFormContext } from "./MultiStepForm";
+import { useFormContext } from "../pages/MultiStepForm";
 import { ShoppingCart } from "lucide-react";
 
 const Step4_Shopping = () => {

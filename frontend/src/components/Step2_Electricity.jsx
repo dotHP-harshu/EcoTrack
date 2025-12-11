@@ -1,6 +1,6 @@
 // /components/Step2_Electricity.jsx
 import React from "react";
-import { useFormContext } from "./MultiStepForm";
+import { useFormContext } from "../pages/MultiStepForm";
 import { Lightbulb } from "lucide-react";
 
 const Step2_Electricity = () => {

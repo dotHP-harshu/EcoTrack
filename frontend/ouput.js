@@ -43,3 +43,42 @@ const testUser = {
   washingMachine: "1-2 times",
   tapUsage: "Yes",
 };
+
+const name = {
+  footprint: {
+    total: "533.13",
+    categoryEmission: {
+      transportEmission: 10.223999999999998,
+      elecEmission: 14.901428571428571,
+      dietEmission: 204,
+      shoppingEmission: 93,
+      digitalEmission: 169,
+      waterEmission: 42,
+    },
+  },
+  formData: {
+    trips: [
+      {
+        mode: "bus",
+        distance: "12",
+      },
+    ],
+    travelDays: "12",
+    electricityBill: "122",
+    energyEfficiency: "medium",
+    turnOffHabit: "sometimes",
+    dietType: "vegetarian",
+    eatingOut: "12",
+    packagedFood: "rarely",
+    dairy: "medium",
+    shoppingFreq: "weekly",
+    deliveries: "12",
+    cookingMethod: "electric",
+    streamingHours: "12",
+    deviceCount: "5",
+    cloudStorage: "light",
+    bath: "3-4 buckets (45-80L)",
+    washingMachine: "12",
+    tapUsage: "sometimes",
+  },
+};

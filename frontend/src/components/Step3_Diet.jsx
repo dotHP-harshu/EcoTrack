@@ -1,6 +1,6 @@
 // /components/Step3_Diet.jsx
 import React from "react";
-import { useFormContext } from "./MultiStepForm";
+import { useFormContext } from "../pages/MultiStepForm";
 import { Carrot } from "lucide-react";
 
 const Step3_Diet = () => {

@@ -1,17 +1,15 @@
 // /components/ResultSummary.jsx
-import React from "react";
+import React, { useState } from "react";
 import Chart from "react-google-charts";
 import { calclulateBenchMark } from "../utils/benchMarkCalculator";
 import { makeTipObject } from "../utils/tipDataCalculator";
 import TipCard from "./TipCard";
-
-const benchMarkColors = {
-  Hight: "#",
-};
+import { addCfhApi } from "../services/api";
 
 const ResultSummary = ({ footprint, formData }) => {
   const [isShowingTipSection, setIsShowingTipSection] = React.useState(false);
-  console.log(formData);
+  const [tips, setTips] = useState([]);
+  console.log({ footprint, formData });
 
   const categoryObject = {
     transportEmission: "Transport",
@@ -29,12 +27,24 @@ const ResultSummary = ({ footprint, formData }) => {
   console.log(benchMarks);
   const data = [["Category", "kg CO2 per month"], ...chartData];
 
+  const saveResult = async () => {
+    const { data, error } = await addCfhApi(
+      "68a8a1f30a8eb419665a6253",
+      footprint?.total,
+      footprint?.categoryEmission,
+      formData,
+      tips
+    );
+    if (error) return console.log("❌");
+    console.log(data);
+  };
+
   const options = {
     title: "Monthly Carbon Emission in Kg",
     pieHole: 0.4,
     is3D: true,
     sliceVisibilityThreshold: 0,
-    backgroundColor:"transparent",
+    backgroundColor: "transparent",
     legend: {
       position: "bottom",
       alignment: "end",
@@ -83,10 +93,12 @@ const ResultSummary = ({ footprint, formData }) => {
                   benchMarks[cat],
                   footprint.categoryEmission
                 );
+                setTips((prev) => [...prev, tipObject]);
                 return (
                   <TipCard key={i} tipObject={tipObject} formData={formData} />
                 );
               })}
+              {console.log(tips)}
             </div>
           </div>
         ) : (
@@ -119,7 +131,10 @@ const ResultSummary = ({ footprint, formData }) => {
         <button className="text-base max-xs:text-xs font-mono px-4 py-1 rounded-md border-2 border-border-dark outline-none cursor-pointer transition-colors duration-300 hover:bg-white">
           Recalculate
         </button>
-        <button className="text-base max-xs:text-xs font-mono px-4 py-1 rounded-md border-2 border-border-dark outline-none cursor-pointer transition-colors duration-300 hover:bg-white">
+        <button
+          onClick={() => saveResult()}
+          className="text-base max-xs:text-xs font-mono px-4 py-1 rounded-md border-2 border-border-dark outline-none cursor-pointer transition-colors duration-300 hover:bg-white"
+        >
           Save Results
         </button>
         <button className="text-base max-xs:text-xs font-mono px-4 py-1 rounded-md border-2 border-border-dark outline-none cursor-pointer transition-colors duration-300 hover:bg-white">

@@ -1,6 +1,6 @@
 // /components/Step5_Digital.jsx
 import React from "react";
-import { useFormContext } from "./MultiStepForm";
+import { useFormContext } from "../pages/MultiStepForm";
 import { QrCode } from "lucide-react";
 
 const Step5_Digital = () => {
