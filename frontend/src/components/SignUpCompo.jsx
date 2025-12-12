@@ -1,8 +1,10 @@
 import { Loader2, Lock, Mail, Package, User } from "lucide-react";
 import React, { useState } from "react";
 import { signUpApi } from "../services/api";
+import { useNavigate } from "react-router";
 
-function SignUpCompo({ setIsShowingLogin, setMessage }) {
+function SignUpCompo({ setMessage }) {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -145,7 +147,7 @@ function SignUpCompo({ setIsShowingLogin, setMessage }) {
           Already have EcoTrack Account?
           <button
             onClick={() => {
-              setIsShowingLogin(true);
+              navigate("/auth/login")
             }}
             className="border-none ml-2 text-text cursor-pointer outline-none hover:underline"
           >

@@ -21,7 +21,6 @@ function AiTipPopUp({ setIsShowingAiPopup, cfh, setCfh }) {
         cfh._id
       ),
   });
-  console.log(aiTip?.data?.data?.tipText);
 
   return (
     <section className="w-dvw h-dvh fixed top-0 left-0 z-10 bg-[#0000006e] backdrop-blur-sm flex justify-center items-center">

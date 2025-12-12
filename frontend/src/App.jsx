@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const queryClient = new QueryClient();
@@ -16,21 +18,31 @@ function App() {
     },
     {
       path: "/form",
-      element: <MultiStepForm />,
+      element: (
+        <ProtectedRoute>
+          <MultiStepForm />
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/profile",
-      element: <Profile />,
+      element: (
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      ),
     },
     {
-      path: "/auth",
+      path: "/auth/:module",
       element: <Auth />,
     },
   ]);
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </AuthProvider>
   );
 }
 

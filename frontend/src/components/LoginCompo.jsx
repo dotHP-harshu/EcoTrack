@@ -2,10 +2,12 @@ import { Loader2, Lock, User } from "lucide-react";
 import React, { useState } from "react";
 import { loginApi } from "../services/api";
 import { useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
-function LoginCompo({ setIsShowingLogin, setMessage }) {
+function LoginCompo({ setMessage }) {
   const [isShowingPass, setIsShowingPass] = useState(false);
   const [isLogging, setIsLogging] = useState(false)
+  const {setUser} = useAuth()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,8 +18,8 @@ function LoginCompo({ setIsShowingLogin, setMessage }) {
     e.preventDefault();
     setMessage("");
 
-    if ((formData.email === "", formData.password === "")) {
-      return setMessage("Fields can be empty.");
+    if ((formData.email === "" || formData.password === "")) {
+      return setMessage("Fields can not be empty.");
     }
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-z]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(formData.email)) {
@@ -28,9 +30,10 @@ function LoginCompo({ setIsShowingLogin, setMessage }) {
     const { data, error } = await loginApi(formData.email, formData.password);
     if (error) {
       setIsLogging(false)
-      return setMessage(error.message || error.response.data.message || "Error on loggin in.") ;
+      return setMessage(error.message || error.response.data.message || "Error on logging in.") ;
     }
-    if (data) {
+    if (data?.data?.user) {
+      setUser(data?.data?.user)
       setIsLogging(false)
       navigate("/profile");
     }
@@ -100,6 +103,7 @@ function LoginCompo({ setIsShowingLogin, setMessage }) {
             <span className="w-full flex justify-center items-center px-6 mt-4">
               <button
                 onClick={handleLogin}
+                disabled={isLogging}
                 className="text-lg bg-primary text-white w-full text-center outline-none border-none font-heartfield py-1 rounded-full cursor-pointer hover:bg-primary-hover transition-colors duration-30 flex justify-center items-center"
               >
                 {
@@ -114,7 +118,7 @@ function LoginCompo({ setIsShowingLogin, setMessage }) {
           Want to Make Ecotrack Account?
           <button
             onClick={() => {
-              setIsShowingLogin(false);
+              navigate("/auth/signup")
             }}
             className="border-none ml-2 text-text cursor-pointer outline-none hover:underline"
           >

@@ -22,11 +22,13 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { useQuery } from "@tanstack/react-query";
-import { aiTipApi, cfhListApi, recentCfhApi } from "../services/api";
+import { aiTipApi, cfhListApi, logoutApi, recentCfhApi } from "../services/api";
 import CfhItemPopup from "../components/CfhItemPopup";
 import AiTipPopUp from "../components/AiTipPopUp";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 ChartJS.register(
   ArcElement,
@@ -51,6 +53,9 @@ function Profile() {
   const profileRef = useRef(null);
   const historyRef = useRef(null);
   const listItemsRef = useRef([]);
+  const { user } = useAuth();
+  const [message , setMessage ] = useState("")
+  const navigate = useNavigate();
 
   const {
     data: cfhList,
@@ -58,7 +63,7 @@ function Profile() {
     error: cfhListError,
   } = useQuery({
     queryKey: ["cfhList"],
-    queryFn: () => recentCfhApi("68a8a1f30a8eb419665a6253"),
+    queryFn: () => recentCfhApi(),
   });
 
   const {
@@ -68,7 +73,7 @@ function Profile() {
     refetch: historyRefetch,
   } = useQuery({
     queryKey: ["history"],
-    queryFn: () => cfhListApi("68a8a1f30a8eb419665a6253"),
+    queryFn: () => cfhListApi(),
     enabled: false,
   });
 
@@ -79,40 +84,19 @@ function Profile() {
 
   const settingCfh = (id, list) => {
     const cfhItem = Object.values(list?.data?.data).filter((c) => c._id == id);
+    if(!cfhItem) return setIsShowingPopup(false)
     setCfh(cfhItem[0]);
   };
 
-  // GSAP Animations
-  // useGSAP(() => {
-  //   // Profile section animation
-  //   gsap.from(profileRef.current, {
-  //     opacity: 0,
-  //     y: -30,
-  //     duration: 0.8,
-  //     ease: "power3.out",
-  //   });
+  const handleLogout = async()=>{
+    const {data, error} = await logoutApi();
 
-  //   // History section animation
-  //   gsap.from(historyRef.current, {
-  //     opacity: 0,
-  //     y: 30,
-  //     duration: 0.8,
-  //     delay: 0.2,
-  //     ease: "power3.out",
-  //   });
+    if(error){
+      return setMessage(error?.message || "Error on logout.");
+    }
+    navigate("/auth/login")
 
-  //   // Stagger animation for list items
-  //   if (listItemsRef.current.length > 0) {
-  //     gsap.from(listItemsRef.current, {
-  //       opacity: 0,
-  //       x: -20,
-  //       duration: 0.5,
-  //       stagger: 0.1,
-  //       ease: "power2.out",
-  //       delay: 0.4,
-  //     });
-  //   }
-  // }, [cfhList]);
+  }
 
   useEffect(() => {
     if (!isLoadingCfhList && cfhList) {
@@ -137,33 +121,26 @@ function Profile() {
         ],
       };
       setGraphData(data);
+      setIsShowingLineGraph(true)
     }
 
     return () => {};
   }, [cfhList]);
 
-  console.log(cfhList)
-  
-  if(isLoadingCfhList){
-    return(
-       <div className="h-dvh w-dvw">
-        <Loader className="animate-spin"/>
-      </div>
-
-    )
-  }
-
-  if(cfhList?.error && !isLoadingCfhList || history?.error && !isLoadingHistory){
-    return(
-      <div className="h-dvh w-dvw">
-        <AlertTriangle/>
-        <h2>{cfhList?.error?.message || history?.error?.message || "An error occurred while connecting to the server"}</h2>
-      </div>
-    )
-  }
-
   return (
     <main className="min-h-screen bg-linear-to-br from-bg-base via-bg-subtle to-bg-muted p-6 md:p-10">
+       {message !== "" && (
+        <div className="auth-message max-w-sm fixed flex flex-col-reverse justify-center items-center gap-1 z-10 top-4 left-1/2 -translate-x-1/2 bg-primary-hover pl-4 pr-2 py-0.5">
+          <p className="text-sm text-white font-mono font-light tracking-tighter text-center">
+            {message}
+          </p>
+          <span onClick={()=>{
+            setMessage("")
+          }} className="cursor-pointer hover:rotate-180 transition-transform">
+            <Plus className="rotate-45 text-white" />
+          </span>
+        </div>
+      )}
       {/* Profile Section */}
       <section
         ref={profileRef}
@@ -172,19 +149,31 @@ function Profile() {
         {/* Decorative gradient overlay */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-accent/10 to-primary/10 rounded-full blur-3xl z-0"></div>
 
-        <div className="profile-wrapper flex items-center gap-6 relative z-10">
-          <div className="profile-img-wrapper w-24 h-24 rounded-full bg-lineear-to-br from-accent to-primary shadow-lg flex items-center justify-center text-white text-3xl font-bold relative overflow-hidden group">
-            <div className="absolute inset-0 bg-linear-to-br from-accent-light to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <span className="relative z-10">HP</span>
+        <div className="profile-wrapper flex items-center justify-between gap-6 relative z-10 max-sm:flex-col max-sm:justify-center max-sm:items-center">
+          <div className="flex gap-6 max-sm:flex-col max-sm:justify-center max-sm:items-center max-sm:text-center">
+            <div className="profile-img-wrapper w-24 h-24 rounded-full bg-lineear-to-br from-accent to-primary shadow-lg flex items-center justify-center text-white text-3xl font-bold relative overflow-hidden group">
+              <div className="absolute inset-0 bg-linear-to-br from-accent-light to-accent group-hover:opacity-100 transition-opacity duration-300"></div>
+              <span className="relative z-10 uppercase">
+                {user.name.split(" ")[0][0]}
+              </span>
+            </div>
+            <div className="profile-detail">
+              <h2 className="text-4xl max-xs:text-3xl font-heartfield font-bold tracking-tight text-text-heading mb-1">
+                Hello, {user.name}!
+              </h2>
+              <h2 className="text-lg max-xs:text-base font-sans font-light tracking-tight text-text-heading mb-1">
+                {user.email}
+              </h2>
+              <p className="text-lg max-xs:text-base text-text-light flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-accent" />
+                Welcome to your EcoTrack Profile
+              </p>
+            </div>
           </div>
-          <div className="profile-detail">
-            <h2 className="text-4xl max-xs:text-3xl font-heartfield font-bold tracking-tight text-text-heading mb-1">
-              Hello, Harsh Prajapti!
-            </h2>
-            <p className="text-lg max-xs:text-base text-text-light flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-accent" />
-              Welcome to your EcoTrack Profile
-            </p>
+          <div>
+            <button onClick={()=>navigate("/form")} className="px-6 py-2 rounded-md bg-linear-to-br from-accent to-primary text-white font-semibold shadow-md cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 outline-none animate-float-slow">
+              Calculate
+            </button>
           </div>
         </div>
       </section>
@@ -205,12 +194,12 @@ function Profile() {
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
           {/* Graph Section */}
           <div className="bg-linear-to-br from-primary/5 to-accent/5 rounded-xl p-6 min-h-[500px] border border-primary/10">
-            {isShowingLineGraph && (
+            {!isShowingLineGraph && (
               <div className="w-full h-full flex justify-center items-center">
                 <Loader className="animate-spin" />
               </div>
             )}
-            {!isShowingLineGraph && graphData && (
+            {isShowingLineGraph && graphData && (
               <div className="p-4 h-full w-full">
                 <Line
                   data={graphData}
@@ -337,16 +326,19 @@ function Profile() {
         </div>
       </section>
 
-        {/* all history  */}
+      {/* all history  */}
       <section className="mt-10 w-full p-8 rounded-2xl bg-white shadow-lg shadow-shadow border border-border/20 relative overflow-hidden">
         {!isShowingHistory && (
           <div className="w-full flex justify-center items-center">
-            <button onClick={getHistory} className="border-none outline-none px-4 underline text-lg font-light cursor-pointer hover:text-primary-hover">
+            <button
+              onClick={getHistory}
+              className="border-none outline-none px-4 underline text-lg font-light cursor-pointer hover:text-primary-hover"
+            >
               Show History
             </button>
           </div>
         )}
-        { isShowingHistory &&
+        {isShowingHistory && (
           <div>
             <h3 className="text-2xl font-bold font-bulter">All History</h3>
             <ul className="space-y-3 p-4">
@@ -428,7 +420,7 @@ function Profile() {
                 ))}
             </ul>
           </div>
-        }
+        )}
       </section>
 
       {/* Popups */}
@@ -436,8 +428,15 @@ function Profile() {
         <CfhItemPopup cfh={cfh} setIsShowingPopup={setIsShowingPopup} />
       )}
       {isShowingAiPopup && (
-        <AiTipPopUp setIsShowingAiPopup={setIsShowingAiPopup} cfh={cfh} setCfh={setCfh} />
+        <AiTipPopUp
+          setIsShowingAiPopup={setIsShowingAiPopup}
+          cfh={cfh}
+          setCfh={setCfh}
+        />
       )}
+      <footer className="mt-6 flex justify-center items-center bg-transparent px-4">
+        <button onClick={handleLogout} className="text-lg max-xs:text-base font-mono underline capitalize cursor-pointer outline-none border-none" >logout</button>
+      </footer>
     </main>
   );
 }

@@ -9,8 +9,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TextPlugin from "gsap/TextPlugin";
 import LeadershipTeam from "../components/LeadershipTeam";
+import { Github } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger, TextPlugin);
+gsap.registerPlugin(useGSAP, ScrollTrigger, TextPlugin);
 
 const matterData = [
   {
@@ -125,205 +126,215 @@ function Home() {
   const workingRef = useRef(null);
   const tipsRef = useRef(null);
 
-  useGSAP(() => {
-    const heroSection = document.querySelector(".hero-section");
-    const heroTimeline = gsap.timeline({ delay: 4 });
+  useGSAP(
+    () => {
+      const heroSection = document.querySelector(".hero-section");
+      const heroTimeline = gsap.timeline({ delay: 4 });
+      if (!heroSection) return; // prevent crash
 
-    // Hero text animations with stagger
-    heroTimeline
-      .to(".hero-section h2", {
-        clipPath: "inset(0 0% 0 0)",
-        duration: 0.8,
-        ease: "power3.inOut",
-      })
-      .from(
-        ".hero-section h1",
-        {
-          y: 100,
-          opacity: 0,
+      // Hero text animations with stagger
+      heroTimeline
+        .to(".hero-section h2", {
+          clipPath: "inset(0 0% 0 0)",
           duration: 0.8,
-          ease: "power3.out",
-        },
-        "-=0.4"
-      )
-      .from(
-        ".hero-section p",
-        {
-          y: 30,
-          opacity: 0,
-          duration: 0.6,
+          ease: "power3.inOut",
+        })
+        .from(
+          ".hero-section h1",
+          {
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+          "-=0.4"
+        )
+        .from(
+          ".hero-section p",
+          {
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            ease: "power2.out",
+          },
+          "-=0.4"
+        )
+        .to(".hero-btn", {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
           ease: "power2.out",
-        },
-        "-=0.4"
-      )
-      .to(".hero-btn", {
-        opacity: 1,
-        scale:1,
-        duration:0.8,
-        ease:"power2.out"
-      });
-    // Hero image floating animation
-    gsap.to(".hero-img", {
-      y: -20,
-      duration: 3,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut",
-    });
-
-    // Hero scroll animation with rotation
-    gsap.to(".hero-section", {
-      scale: 0.75,
-      rotation: -15,
-      y: 250,
-      scrollTrigger: {
-        trigger: ".hero-section",
-        start: "center center",
-        end: "bottom top",
-        scrub: 1,
-      },
-    });
-
-    // 3D parallax effect on mouse move
-    heroSection.addEventListener("mousemove", (e) => {
-      const moveX = (e.clientX / window.innerWidth - 0.5) * 40;
-      const moveY = (e.clientY / window.innerHeight - 0.5) * 40;
+        });
+      // Hero image floating animation
       gsap.to(".hero-img", {
-        perspective: 200,
-        rotateX: moveY,
-        rotateY: moveX,
-        x: moveX / 4,
-        y: moveY / 4,
-        duration: 0.5,
-        ease: "power2.out",
+        y: -20,
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
       });
-    });
-  });
 
-   useGSAP(() => {
-    gsap.from(".section-second", {
-      scale: 0.85,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: ".section-second",
-        start: "top 80%",
-        end: "top 40%",
-        scrub: 1,
-      },
-    });
+      // Hero scroll animation with rotation
+      gsap.to(".hero-section", {
+        scale: 0.75,
+        rotation: -15,
+        y: 250,
+        scrollTrigger: {
+          trigger: ".hero-section",
+          start: "center center",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
 
-    // Matters section animations
-    gsap.from(".matters-heading", {
-      y: 50,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: ".matters-heading",
-        start: "top 80%",
-        end: "top 60%",
-        scrub: 1,
-      },
-    });
+      // 3D parallax effect on mouse move
+      heroSection.addEventListener("mousemove", (e) => {
+        const moveX = (e.clientX / window.innerWidth - 0.5) * 40;
+        const moveY = (e.clientY / window.innerHeight - 0.5) * 40;
+        gsap.to(".hero-img", {
+          perspective: 200,
+          rotateX: moveY,
+          rotateY: moveX,
+          x: moveX / 4,
+          y: moveY / 4,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      });
+    },
+    { scope: heroRef.current }
+  );
 
-    gsap.from(".matters-subtitle", {
-      y: 30,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: ".matters-subtitle",
-        start: "top 80%",
-        end: "top 60%",
-        scrub: 1,
-      },
-    });
+  useGSAP(
+    () => {
+      gsap.from(".section-second", {
+        scale: 0.85,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: ".section-second",
+          start: "top 80%",
+          end: "top 40%",
+          scrub: 1,
+        },
+      });
 
-    // Featured matter card animation
-    gsap.from(".featured-matter", {
-      scale: 0.9,
-      y: 50,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: ".featured-matter",
-        start: "top 80%",
-        end: "top 50%",
-        scrub: 1,
-      },
-    });
+      // Matters section animations
+      gsap.from(".matters-heading", {
+        y: 50,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: ".matters-heading",
+          start: "top 80%",
+          end: "top 60%",
+          scrub: 1,
+        },
+      });
 
-    // Stagger animation for matter cards
-    gsap.from(".matter-card", {
-      y: 60,
-      opacity: 0,
-      stagger: 0.15,
-      duration: 0.8,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: ".matter-cards-grid",
-        start: "top 75%",
-        toggleActions:"restart none restart none"
-      },
-    });
-  });
+      gsap.from(".matters-subtitle", {
+        y: 30,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: ".matters-subtitle",
+          start: "top 80%",
+          end: "top 60%",
+          scrub: 1,
+        },
+      });
 
-  useGSAP(() => {
-    // Working section animations
-    gsap.from(".working-heading", {
-      y: 50,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: ".working-heading",
-        start: "top 80%",
-        end: "top 60%",
-        scrub: 1,
-      },
-    });
+      // Featured matter card animation
+      gsap.from(".featured-matter", {
+        scale: 0.9,
+        y: 50,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: ".featured-matter",
+          start: "top 80%",
+          end: "top 50%",
+          scrub: 1,
+        },
+      });
 
-    // Stagger animation for work cards
-    gsap.from(".work-card", {
-      y: 80,
-      opacity: 0,
-      stagger: 0.2,
-      duration: 1,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: ".work-cards-grid",
-        start: "top 70%",
-        toggleActions:"restart none restart none"
-      },
-    });
+      // Stagger animation for matter cards
+      gsap.from(".matter-card", {
+        y: 60,
+        opacity: 0,
+        stagger: 0.15,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".matter-cards-grid",
+          start: "top 75%",
+          toggleActions: "restart none restart none",
+        },
+      });
+    },
+    { scope: mattersRef.current }
+  );
 
-  });
+  useGSAP(
+    () => {
+      // Working section animations
+      gsap.from(".working-heading", {
+        y: 50,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: ".working-heading",
+          start: "top 80%",
+          end: "top 60%",
+          scrub: 1,
+        },
+      });
 
- 
+      // Stagger animation for work cards
+      gsap.from(".work-card", {
+        y: 80,
+        opacity: 0,
+        stagger: 0.2,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".work-cards-grid",
+          start: "top 70%",
+          toggleActions: "restart none restart none",
+        },
+      });
+    },
+    { scope: workingRef.current }
+  );
 
-  useGSAP(()=>{
-     // Tips section animations
-    gsap.from(".tips-heading", {
-      y: 50,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: ".tips-heading",
-        start: "top 80%",
-        end: "top 60%",
-        scrub: 1,
-      },
-    });
+  useGSAP(
+    () => {
+      // Tips section animations
+      gsap.from(".tips-heading", {
+        y: 50,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: ".tips-heading",
+          start: "top 80%",
+          end: "top 60%",
+          scrub: 1,
+        },
+      });
 
-    // Stagger animation for tip cards with random delays
-    gsap.from(".tip-card", {
-      scale: 0.8,
-      opacity: 0,
-      stagger: {
-        amount: 0.8,
-        from: "random",
-      },
-      duration: 0.6,
-      ease: "back.out(1.7)",
-      scrollTrigger: {
-        trigger: ".tips-cards-grid",
-        start: "top 75%",
-        toggleActions:"restart none restart none"
-      },
-    });
-  })
+      // Stagger animation for tip cards with random delays
+      gsap.from(".tip-card", {
+        scale: 0.8,
+        opacity: 0,
+        stagger: {
+          amount: 0.8,
+          from: "random",
+        },
+        duration: 0.6,
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: ".tips-cards-grid",
+          start: "top 75%",
+          toggleActions: "restart none restart none",
+        },
+      });
+    },
+    { scope: tipsRef }
+  );
 
   return (
     <>
@@ -335,9 +346,9 @@ function Home() {
         style={heroBackground}
       >
         {/* Decorative floating elements */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-accent/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-accent rounded-full blur-3xl animate-pulse-slow"></div>
         <div
-          className="absolute bottom-20 right-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl animate-pulse-slow"
+          className="absolute bottom-20 right-10 w-40 h-40 bg-primary rounded-full blur-3xl animate-pulse-slow"
           style={{ animationDelay: "2s" }}
         ></div>
 
@@ -358,7 +369,10 @@ function Home() {
             reduce your environmental impact. Join a community dedicated to a
             sustainable planet.
           </p>
-          <button onClick={()=>navigate("/auth")} className="hero-btn opacity-0 scale-75 px-6 py-1 bg-accent hover:bg-accent-hover text-white font-sora font-semibold rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg shadow-md cursor-pointer">
+          <button
+            onClick={() => navigate("/auth/login")}
+            className="hero-btn opacity-0 scale-75 px-6 py-1 bg-accent hover:bg-accent-hover text-white font-sora font-semibold rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg shadow-md cursor-pointer"
+          >
             Register Now
           </button>
         </div>
@@ -378,7 +392,7 @@ function Home() {
         className="section-second min-h-dvh mt-[100dvh] w-full bg-bg-subtle py-20 relative overflow-hidden"
       >
         {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-4 right-0 w-96 h-96 bg-[#86ffd3] rounded-full blur-3xl"></div>
 
         <h2 className="matters-heading text-5xl font-sora font-bold mx-auto w-fit text-center text-text-heading max-sm:text-3xl">
           Why it Matters?
@@ -388,7 +402,7 @@ function Home() {
           the critical environmental challenges we face.
         </p>
 
-        <div className="featured-matter max-w-2xl mx-auto w-full mt-20 p-8 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 backdrop-blur-sm border border-white/20 shadow-xl">
+        <div className="featured-matter max-w-2xl mx-auto w-full mt-20 p-8 rounded-2xl bg-linear-to-br from-[#00563b73] to-[#fff0] backdrop-blur-sm border border-white/20 shadow-xl">
           <img
             src="/images/matter-1.png"
             alt="matter"
@@ -425,7 +439,7 @@ function Home() {
         style={workingBackground}
       >
         {/* Background decoration */}
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
 
         <h2 className="working-heading text-5xl font-sora font-bold mx-auto w-fit text-center text-text-heading max-sm:text-3xl">
           How It Works
@@ -456,7 +470,7 @@ function Home() {
         className="min-h-dvh w-full py-20 bg-white relative overflow-hidden"
       >
         {/* Background decoration */}
-        <div className="absolute top-20 right-20 w-80 h-80 bg-accent/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 right-1/2 -translate-1/12 w-80 h-80 bg-[#6ac7a5] rounded-full blur-3xl"></div>
 
         <h2 className="tips-heading text-5xl font-sora font-bold mx-auto w-fit text-center text-text-heading max-sm:text-3xl">
           Tips and Recommendations
@@ -476,7 +490,42 @@ function Home() {
       </section>
       {/* Tips and Recommendations  */}
 
-      <LeadershipTeam/>
+      <LeadershipTeam />
+
+      <footer className="bg-bg-alt flex justify-evenly items-center px-6 py-1 max-sm:flex-col-reverse max-sm:justify-center gap-4">
+        <div className="flex justify-center items-center gap-2">
+          <img src="/images/logo.svg" alt="logo" className="w-12" />
+          <h2 className="text-xl font-bold font-bulter text-accent">
+            Eco<span className="text-primary">Track</span>
+          </h2>
+        </div>
+        <div>
+          <p className="text-base font-heartfield">
+            &copy; Minor Project | 3<sup>rd</sup> Year Students{" "}
+          </p>
+        </div>
+        <div>
+          <a href="https://github.com/dothp-harshu/ecotrack" className="p-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              height="30px"
+              width="30px"
+              version="1.1"
+              id="Layer_1"
+              viewBox="0 0 291.32 291.32"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  style={{ fill: "#2B414D" }}
+                  d="M145.66,0C65.219,0,0,65.219,0,145.66c0,80.45,65.219,145.66,145.66,145.66   s145.66-65.21,145.66-145.66C291.319,65.219,226.1,0,145.66,0z M186.462,256.625c-0.838-11.398-1.775-25.518-1.83-31.235   c-0.364-4.388-0.838-15.549-11.434-22.677c42.068-3.523,62.087-26.774,63.526-57.499c1.202-17.497-5.754-32.883-18.107-45.3   c0.628-13.282-0.401-29.023-1.256-35.941c-9.486-2.731-31.608,8.949-37.79,13.947c-13.037-5.062-44.945-6.837-64.336,0   c-13.747-9.668-29.396-15.64-37.926-13.974c-7.875,17.452-2.813,33.948-1.275,35.914c-10.142,9.268-24.289,20.675-20.447,44.572   c6.163,35.04,30.816,53.94,70.508,58.564c-8.466,1.73-9.896,8.048-10.606,10.788c-26.656,10.997-34.275-6.791-37.644-11.425   c-11.188-13.847-21.23-9.832-21.849-9.614c-0.601,0.218-1.056,1.092-0.992,1.511c0.564,2.986,6.655,6.018,6.955,6.263   c8.257,6.154,11.316,17.27,13.2,20.438c11.844,19.473,39.374,11.398,39.638,11.562c0.018,1.702-0.191,16.032-0.355,27.184   C64.245,245.992,27.311,200.2,27.311,145.66c0-65.365,52.984-118.348,118.348-118.348S264.008,80.295,264.008,145.66   C264.008,196.668,231.69,239.992,186.462,256.625z"
+                />
+              </g>
+            </svg>
+          </a>
+        </div>
+      </footer>
     </>
   );
 }

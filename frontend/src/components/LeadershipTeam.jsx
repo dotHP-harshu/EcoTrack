@@ -1,8 +1,9 @@
 import React, { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const teamMembers = [
   {
@@ -41,35 +42,31 @@ const TeamCard = ({ member }) => {
   const defaultTextRef = useRef(null);
   const tlRef = useRef(null);
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      tlRef.current = gsap
-        .timeline({ paused: true })
-        .to(
-          defaultTextRef.current,
-          {
-            opacity: 0,
-            y: 10,
-            duration: 0.2,
-            ease: "power2.in",
-          },
-          0
-        )
-        .to(
-          infoCardRef.current,
-          {
-            opacity: 1,
-            y: -30,
-            scale: 1,
-            duration: 0.3,
-            ease: "back.out(1.7)",
-          },
-          0.1
-        );
-    }, cardRef);
-
-    return () => ctx.revert();
-  }, []);
+  useGSAP(() => {
+    tlRef.current = gsap
+      .timeline({ paused: true })
+      .to(
+        defaultTextRef.current,
+        {
+          opacity: 0,
+          y: 10,
+          duration: 0.2,
+          ease: "power2.in",
+        },
+        0
+      )
+      .to(
+        infoCardRef.current,
+        {
+          opacity: 1,
+          y: -30,
+          scale: 1,
+          duration: 0.3,
+          ease: "back.out(1.7)",
+        },
+        0.1
+      );
+  },{scope:cardRef});
 
   return (
     <div
@@ -106,47 +103,38 @@ const TeamCard = ({ member }) => {
 const LeadershipTeam = () => {
   const sectionRef = useRef(null);
 
+  useGSAP(() => {
+
+    gsap.from(".team-title", {
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 75%",
+        toggleActions: "restart none restart none",
+      },
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      delay: 0.2,
+      ease: "power3.out",
+    });
+
+    gsap.from(".team-grid > div", {
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 70%",
+        toggleActions: "restart none restart none",
+      },
+      opacity: 0,
+      y: 50,
+      duration: 0.8,
+      stagger: 0.15,
+      delay: 0.4,
+      ease: "power3.out",
+    });
+  },{scope:sectionRef});
+
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".team-badge", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          toggleActions: "restart none restart none",
-        },
-        opacity: 0,
-        y: -20,
-        duration: 0.8,
-        ease: "power3.out",
-      });
-
-      gsap.from(".team-title", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-          toggleActions: "restart none restart none",
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.8,
-        delay: 0.2,
-        ease: "power3.out",
-      });
-
-      gsap.from(".team-grid > div", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "restart none restart none",
-        },
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        stagger: 0.15,
-        delay: 0.4,
-        ease: "power3.out",
-      });
-    }, sectionRef);
+    const ctx = gsap.context(() => {}, sectionRef);
 
     return () => ctx.revert();
   }, []);
@@ -158,11 +146,8 @@ const LeadershipTeam = () => {
     >
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <span className="team-badge inline-block bg-[#2DD4BF] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide mb-4">
-            Dedicated Team
-          </span>
           <h2 className="team-title text-4xl md:text-5xl font-bold text-gray-900">
-            Leadership{" "}
+            Deticated{" "}
             <span className="relative z-10">
               Team
               <span className="absolute bottom-1 left-0 w-full h-3 bg-teal-100 -z-10 opacity-60"></span>

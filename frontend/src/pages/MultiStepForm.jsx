@@ -241,9 +241,6 @@ export default function MultiStepForm() {
 
   // Calculate footprint only when needed
   const footprint = useMemo(() => {
-    if (state.isComplete) {
-      console.log(state.formData);
-    }
     return state.isComplete ? calculateCarbonFootprint(state.formData) : 0;
   }, [state.isComplete, state.formData]);
 

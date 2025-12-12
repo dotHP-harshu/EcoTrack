@@ -5,7 +5,6 @@ const api = axios.create({
   withCredentials: true,
 });
 const request = async (method, url, data = null) => {
-  console.log({ method, url, data });
   try {
     const res = await api({ method, url, data });
     return { data: res.data, error: null };
@@ -16,7 +15,8 @@ const request = async (method, url, data = null) => {
     let errorMessage = "Something went wrong";
 
     if (error.code === "ERR_NETWORK") {
-      errorMessage = "Network Error: Please check your internet connection and try again.";
+      errorMessage =
+        "Network Error: Please check your internet connection and try again.";
     } else if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
@@ -34,28 +34,29 @@ const request = async (method, url, data = null) => {
 };
 
 export const addCfhApi = (
-  userId,
   totalEmission,
   categoryEmission,
   categoryBreakdown,
   categoryTips
 ) =>
   request("POST", "/cfh/add", {
-    userId,
     totalEmission,
     categoryEmission,
     categoryBreakdown,
     categoryTips,
   });
 
-export const cfhListApi = (userId) => request("GET", "/cfh/all/" + userId,);
-export const recentCfhApi = (userId) => request("GET", "/cfh/recent/" + userId,);
+export const cfhListApi = () => request("GET", "/cfh/all/");
+export const recentCfhApi = () => request("GET", "/cfh/recent/");
 
 export const signUpApi = (email, name, password) =>
   request("POST", "/auth/signup", { email, name, password });
 
 export const loginApi = (email, password) =>
   request("POST", "/auth/login", { email, password });
+
+export const meApi = () => request("GET", "/auth/me");
+export const logoutApi = () => request("POST", "/auth/logout");
 
 export const aiTipApi = (
   totalEmission,
