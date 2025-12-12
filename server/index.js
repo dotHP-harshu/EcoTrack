@@ -19,14 +19,15 @@ app.use(express.json())
 // Route imports
 const authRoutes = require("./routes/auth.routes")
 const cfhRoutes = require("./routes/cfh.routes")
-const aiRoutes = require("./routes/ai.routes")
+const aiRoutes = require("./routes/ai.routes");
+const authMiddleWare = require("./middleware/auth.middelware");
 
 
 
 // Routes 
 app.use("/auth", authRoutes)
-app.use("/cfh",cfhRoutes )
-app.use("/ai",aiRoutes)
+app.use("/cfh",authMiddleWare, cfhRoutes )
+app.use("/ai",authMiddleWare,aiRoutes)
 app.get("/", (req, res) => {
   res.send("hello world");
 });

@@ -111,7 +111,6 @@ const aiSuggestionController = async (req, res) => {
     sendSuccess(res, true, 200, "Successfull ai response from ai", aiTip);
   } catch (error) {
     sendError(res, false, 400, "Error on generating ai response", error);
-    console.log(error);
   }
 };
 

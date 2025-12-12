@@ -2,8 +2,8 @@ const router = require("express").Router();
 const cfhModel = require("../models/cfh.model");
 const { sendError, sendSuccess } = require("../utils/resFormatter");
 
-router.get("/all/:userId", async (req, res) => {
-  const {userId} = req.params
+router.get("/all", async (req, res) => {
+  const userId = req.user?._id
   try {
     const cfhs = await cfhModel.find({ userId }).sort({createdAt:-1});
     if (!cfhs)
@@ -21,8 +21,8 @@ router.get("/all/:userId", async (req, res) => {
   }
 });
 
-router.get("/recent/:userId", async (req, res) => {
-  const {userId} = req.params
+router.get("/recent", async (req, res) => {
+  const userId = req.user?._id
   try {
     const cfhs = await cfhModel.find({ userId }).sort({createdAt:-1}).limit(5);
     if (!cfhs)
@@ -41,8 +41,8 @@ router.get("/recent/:userId", async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
+  const userId = req.user?._id
   const {
-    userId,
     totalEmission,
     categoryEmission,
     categoryBreakdown,
