@@ -4,7 +4,7 @@ import { signUpApi } from "../services/api";
 import { useNavigate } from "react-router";
 
 function SignUpCompo({ setMessage }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -36,8 +36,12 @@ function SignUpCompo({ setMessage }) {
       formData.password
     );
     if (error) {
-      setIsSigningUp(false)
-      return setMessage(error.message || error.response.data.message || "Any Error occured on signing up.");
+      setIsSigningUp(false);
+      return setMessage(
+        error.message ||
+          error.response.data.message ||
+          "Any Error occured on signing up."
+      );
     }
 
     if (data) {
@@ -147,7 +151,7 @@ function SignUpCompo({ setMessage }) {
           Already have EcoTrack Account?
           <button
             onClick={() => {
-              navigate("/auth/login")
+              navigate("/auth/login");
             }}
             className="border-none ml-2 text-text cursor-pointer outline-none hover:underline"
           >

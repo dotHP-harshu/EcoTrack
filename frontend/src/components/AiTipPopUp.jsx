@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Loader, X } from "lucide-react";
-import React from "react";
+import { AlertCircleIcon, Loader, X } from "lucide-react";
 import { aiTipApi } from "../services/api";
 import ReactMarkDown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -21,6 +20,7 @@ function AiTipPopUp({ setIsShowingAiPopup, cfh, setCfh }) {
         cfh._id
       ),
   });
+  console.log(aiTip);
 
   return (
     <section className="w-dvw h-dvh fixed top-0 left-0 z-10 bg-[#0000006e] backdrop-blur-sm flex justify-center items-center">
@@ -29,7 +29,7 @@ function AiTipPopUp({ setIsShowingAiPopup, cfh, setCfh }) {
           className="absolute top-6 right-10 cursor-pointer"
           onClick={() => {
             setIsShowingAiPopup(false);
-            setCfh(null)
+            setCfh(null);
           }}
         >
           <X className="text-primary" size={20} />
@@ -42,6 +42,13 @@ function AiTipPopUp({ setIsShowingAiPopup, cfh, setCfh }) {
           {isLoadingAiTip && (
             <div className="w-full h-full flex justify-center items-center">
               <Loader className="animate-spin" />
+            </div>
+          )}
+
+          {aiTip?.error && !isLoadingAiTip && (
+            <div className="w-full h-full flex justify-center items-center flex-col">
+              <AlertCircleIcon />
+              <p className="text-lg">{aiTip?.error?.message}</p>
             </div>
           )}
           {aiTip && !isLoadingAiTip && (

@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   Loader,
-  X,
   Calendar,
   TrendingDown,
   Sparkles,
   ChevronRight,
-  AlertTriangle,
+  AlertCircleIcon,
 } from "lucide-react";
 import {
   Chart as ChartJS,
@@ -25,8 +24,6 @@ import { useQuery } from "@tanstack/react-query";
 import { aiTipApi, cfhListApi, logoutApi, recentCfhApi } from "../services/api";
 import CfhItemPopup from "../components/CfhItemPopup";
 import AiTipPopUp from "../components/AiTipPopUp";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 
@@ -54,7 +51,7 @@ function Profile() {
   const historyRef = useRef(null);
   const listItemsRef = useRef([]);
   const { user } = useAuth();
-  const [message , setMessage ] = useState("")
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -84,19 +81,18 @@ function Profile() {
 
   const settingCfh = (id, list) => {
     const cfhItem = Object.values(list?.data?.data).filter((c) => c._id == id);
-    if(!cfhItem) return setIsShowingPopup(false)
+    if (!cfhItem) return setIsShowingPopup(false);
     setCfh(cfhItem[0]);
   };
 
-  const handleLogout = async()=>{
-    const {data, error} = await logoutApi();
+  const handleLogout = async () => {
+    const { data, error } = await logoutApi();
 
-    if(error){
+    if (error) {
       return setMessage(error?.message || "Error on logout.");
     }
-    navigate("/auth/login")
-
-  }
+    navigate("/auth/login");
+  };
 
   useEffect(() => {
     if (!isLoadingCfhList && cfhList) {
@@ -121,7 +117,7 @@ function Profile() {
         ],
       };
       setGraphData(data);
-      setIsShowingLineGraph(true)
+      setIsShowingLineGraph(true);
     }
 
     return () => {};
@@ -129,14 +125,17 @@ function Profile() {
 
   return (
     <main className="min-h-screen bg-linear-to-br from-bg-base via-bg-subtle to-bg-muted p-6 md:p-10">
-       {message !== "" && (
+      {message !== "" && (
         <div className="auth-message max-w-sm fixed flex flex-col-reverse justify-center items-center gap-1 z-10 top-4 left-1/2 -translate-x-1/2 bg-primary-hover pl-4 pr-2 py-0.5">
           <p className="text-sm text-white font-mono font-light tracking-tighter text-center">
             {message}
           </p>
-          <span onClick={()=>{
-            setMessage("")
-          }} className="cursor-pointer hover:rotate-180 transition-transform">
+          <span
+            onClick={() => {
+              setMessage("");
+            }}
+            className="cursor-pointer hover:rotate-180 transition-transform"
+          >
             <Plus className="rotate-45 text-white" />
           </span>
         </div>
@@ -171,7 +170,10 @@ function Profile() {
             </div>
           </div>
           <div>
-            <button onClick={()=>navigate("/form")} className="px-6 py-2 rounded-md bg-linear-to-br from-accent to-primary text-white font-semibold shadow-md cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 outline-none animate-float-slow">
+            <button
+              onClick={() => navigate("/form")}
+              className="px-6 py-2 rounded-md bg-linear-to-br from-accent to-primary text-white font-semibold shadow-md cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 outline-none animate-float-slow"
+            >
               Calculate
             </button>
           </div>
@@ -199,6 +201,13 @@ function Profile() {
                 <Loader className="animate-spin" />
               </div>
             )}
+            {(isShowingLineGraph && !graphData) ||
+              (!cfhList && (
+                <div className="w-full h-full flex justify-center items-center flex-col">
+                  <AlertCircleIcon />
+                  <p className="text-lg">Graph data is unavailable.</p>
+                </div>
+              ))}
             {isShowingLineGraph && graphData && (
               <div className="p-4 h-full w-full">
                 <Line
@@ -246,6 +255,15 @@ function Profile() {
               {isLoadingCfhList && (
                 <div className="w-full h-full flex justify-center items-center py-20">
                   <Loader className="animate-spin text-primary w-8 h-8" />
+                </div>
+              )}
+
+              {!isLoadingCfhList && cfhListError && (
+                <div className="w-full h-full flex justify-center items-center py-20">
+                  <p>
+                    {cfhListError?.message ||
+                      "Any error occurred on getting recent list."}
+                  </p>
                 </div>
               )}
 
@@ -352,6 +370,14 @@ function Profile() {
                   <p>{historyError.message}</p>
                 </div>
               )}
+              {!isLoadingHistory && history.error && (
+                <div className="w-full h-full flex justify-center items-center py-20">
+                  <p>
+                    {history.error?.message ||
+                      "An Error occured on getting the history."}
+                  </p>
+                </div>
+              )}
 
               {!isLoadingHistory &&
                 history &&
@@ -435,7 +461,12 @@ function Profile() {
         />
       )}
       <footer className="mt-6 flex justify-center items-center bg-transparent px-4">
-        <button onClick={handleLogout} className="text-lg max-xs:text-base font-mono underline capitalize cursor-pointer outline-none border-none" >logout</button>
+        <button
+          onClick={handleLogout}
+          className="text-lg max-xs:text-base font-mono underline capitalize cursor-pointer outline-none border-none"
+        >
+          logout
+        </button>
       </footer>
     </main>
   );

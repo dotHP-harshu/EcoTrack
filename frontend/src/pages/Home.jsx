@@ -9,7 +9,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TextPlugin from "gsap/TextPlugin";
 import LeadershipTeam from "../components/LeadershipTeam";
-import { Github } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, TextPlugin);
 
@@ -392,6 +391,7 @@ function Home() {
         className="section-second min-h-dvh mt-[100dvh] w-full bg-bg-subtle py-20 relative overflow-hidden"
       >
         {/* Background decoration */}
+
         <div className="absolute top-4 right-0 w-96 h-96 bg-[#86ffd3] rounded-full blur-3xl"></div>
 
         <h2 className="matters-heading text-5xl font-sora font-bold mx-auto w-fit text-center text-text-heading max-sm:text-3xl">
@@ -435,11 +435,18 @@ function Home() {
       {/* How this Works  */}
       <section
         ref={workingRef}
-        className="min-h-dvh w-full flex justify-center items-center flex-col py-20 relative overflow-hidden"
+        className="min-h-dvh w-full flex justify-center items-center flex-col py-20 relative overflow-hidden "
         style={workingBackground}
       >
         {/* Background decoration */}
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
+        <div
+          className="pointer-events-none absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0)",
+            backgroundSize: "32px 32px",
+          }}
+        />
 
         <h2 className="working-heading text-5xl font-sora font-bold mx-auto w-fit text-center text-text-heading max-sm:text-3xl">
           How It Works
@@ -467,10 +474,9 @@ function Home() {
       {/* Tips and Recommendations  */}
       <section
         ref={tipsRef}
-        className="min-h-dvh w-full py-20 bg-white relative overflow-hidden"
+        className="min-h-dvh w-full py-20 bg-[#e0f2fe] relative overflow-hidden"
       >
         {/* Background decoration */}
-        <div className="absolute top-1/2 right-1/2 -translate-1/12 w-80 h-80 bg-[#6ac7a5] rounded-full blur-3xl"></div>
 
         <h2 className="tips-heading text-5xl font-sora font-bold mx-auto w-fit text-center text-text-heading max-sm:text-3xl">
           Tips and Recommendations
@@ -492,7 +498,7 @@ function Home() {
 
       <LeadershipTeam />
 
-      <footer className="bg-bg-alt flex justify-evenly items-center px-6 py-1 max-sm:flex-col-reverse max-sm:justify-center gap-4">
+      <footer className="bg-[#d8f3e8] flex justify-evenly items-center px-6 py-1 max-sm:flex-col-reverse max-sm:justify-center gap-4">
         <div className="flex justify-center items-center gap-2">
           <img src="/images/logo.svg" alt="logo" className="w-12" />
           <h2 className="text-xl font-bold font-bulter text-accent">
@@ -508,13 +514,11 @@ function Home() {
           <a href="https://github.com/dothp-harshu/ecotrack" className="p-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
               height="30px"
               width="30px"
               version="1.1"
               id="Layer_1"
               viewBox="0 0 291.32 291.32"
-              xml:space="preserve"
             >
               <g>
                 <path

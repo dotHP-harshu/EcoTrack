@@ -13,7 +13,7 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 // Route imports
@@ -26,8 +26,8 @@ const authMiddleWare = require("./middleware/auth.middelware");
 
 // Routes 
 app.use("/auth", authRoutes)
-app.use("/cfh",authMiddleWare, cfhRoutes )
-app.use("/ai",authMiddleWare,aiRoutes)
+app.use("/cfh", authMiddleWare, cfhRoutes)
+app.use("/ai", authMiddleWare, aiRoutes)
 app.get("/", (req, res) => {
   res.send("hello world");
 });

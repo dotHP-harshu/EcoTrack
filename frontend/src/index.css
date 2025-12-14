@@ -8,11 +8,11 @@
 }
 @font-face {
   font-family: "nexa";
-  src: url("/fonts/nexa.ttf");
+  src: url("/fonts/nexa.woff");
 }
 @font-face {
   font-family: "heartfield";
-  src: url("/fonts/heartfield.otfi");
+  src: url("/fonts/heartfield.woff");
 }
 
 @theme {
@@ -100,6 +100,19 @@
   50% { transform: translateY(10px); }
 }
 
+@keyframes pulse-bubble {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+
+
+
 .animate-float-slow {
   animation: float-slow 8s ease-in-out infinite;
 }
@@ -124,6 +137,7 @@
   }
 }
 
+/* Scroller style  */
 .scroller::-webkit-scrollbar{
   width: 10px;
 }

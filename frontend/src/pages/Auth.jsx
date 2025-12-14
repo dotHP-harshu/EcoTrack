@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 
-gsap.registerPlugin(useGSAP)
+gsap.registerPlugin(useGSAP);
 
 function Auth() {
   const { module } = useParams();
@@ -53,16 +53,19 @@ function Auth() {
     { scope: overlayRef, dependencies: [authPage] }
   );
 
-  useGSAP(() => {
-    if(messageRef){
-      gsap.from(".auth-message", {
-      scale: 0.5,
-      opacity: 0,
-      duration: 0.4,
-      ease: "power3.out",
-    });
-    }
-  }, {scope:messageRef});
+  useGSAP(
+    () => {
+      if (messageRef) {
+        gsap.from(".auth-message", {
+          scale: 0.5,
+          opacity: 0,
+          duration: 0.4,
+          ease: "power3.out",
+        });
+      }
+    },
+    { scope: messageRef }
+  );
 
   return (
     <div>

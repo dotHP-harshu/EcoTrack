@@ -9,7 +9,7 @@ const aiTipSchema = mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "cfh",
   },
-}, {timestamp:true});
+}, { timestamp: true });
 
 module.exports = mongoose.model("aiTip", aiTipSchema)
 

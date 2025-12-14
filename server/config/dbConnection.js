@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 require("dotenv").config()
 
-const dbConnection = ()=>{
+const dbConnection = () => {
     return mongoose.connect(process.env.MONGOOSE_STRING)
 }
 

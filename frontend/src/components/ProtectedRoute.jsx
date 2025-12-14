@@ -7,7 +7,7 @@ function ProtectedRoute({ children }) {
 
   if (checking) {
     return (
-      <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-[var(--color-bg-subtle)] text-center px-4">
+      <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-bg-subtle text-center px-4">
         {/* Floating Background Elements */}
         <div className="absolute w-16 h-16 bg-accent-light opacity-30 rounded-full top-10 left-10 animate-float-slow" />
         <div className="absolute w-24 h-24 bg-primary-light opacity-20 rounded-full bottom-20 right-16 animate-float-slower" />

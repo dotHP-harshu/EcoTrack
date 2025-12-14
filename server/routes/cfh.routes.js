@@ -5,7 +5,7 @@ const { sendError, sendSuccess } = require("../utils/resFormatter");
 router.get("/all", async (req, res) => {
   const userId = req.user?._id
   try {
-    const cfhs = await cfhModel.find({ userId }).sort({createdAt:-1});
+    const cfhs = await cfhModel.find({ userId }).sort({ createdAt: -1 });
     if (!cfhs)
       return sendError(
         res,
@@ -24,7 +24,7 @@ router.get("/all", async (req, res) => {
 router.get("/recent", async (req, res) => {
   const userId = req.user?._id
   try {
-    const cfhs = await cfhModel.find({ userId }).sort({createdAt:-1}).limit(5);
+    const cfhs = await cfhModel.find({ userId }).sort({ createdAt: -1 }).limit(5);
     if (!cfhs)
       return sendError(
         res,

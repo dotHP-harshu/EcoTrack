@@ -30,7 +30,7 @@ const signupController = async (req, res) => {
 
     const passHash = await bcrypt.hash(password, 10);
     const newUser = await userModel.create({ email, password: passHash, name });
-    const safeUser =  {_id:user._id, email:user.email, name:user.name}
+    const safeUser = { _id: user._id, email: user.email, name: user.name }
     return sendSuccess(res, true, 202, "User Created successfully.", {
       user: safeUser,
     });
@@ -53,9 +53,9 @@ const loginController = async (req, res) => {
     if (!match)
       return sendError(res, false, 400, "Password or email is incorrect.");
 
-    const safeUser = {_id:user._id, email:user.email, name:user.name}
+    const safeUser = { _id: user._id, email: user.email, name: user.name }
 
-    const token = jwt.sign({id:user._id}, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res.cookie("token", token);
 
     //    res.cookie("token", token, {
@@ -65,7 +65,7 @@ const loginController = async (req, res) => {
     //   maxAge: 7 * 24 * 60 * 60 * 1000,
     // });
 
-    return sendSuccess(res, true, 200, "User is logged-in.", {user:safeUser});
+    return sendSuccess(res, true, 200, "User is logged-in.", { user: safeUser });
   } catch (error) {
     return sendError(res, false, 500, "Error logging in.", error);
   }

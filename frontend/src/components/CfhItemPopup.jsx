@@ -1,12 +1,12 @@
 import { Loader2, X } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-function CfhItemPopup({ cfh , setIsShowingPopup}) {
+function CfhItemPopup({ cfh, setIsShowingPopup }) {
   const [graphData, setGraphData] = useState(null);
   const [isShowingGraph, setisShowingGraph] = useState(false);
   const [categoryBreakdown, setCategoryBreakdown] = useState(null);
@@ -71,9 +71,9 @@ function CfhItemPopup({ cfh , setIsShowingPopup}) {
           <div className="p-6 flex justify-center items-center">
             {!isShowingGraph && <Loader2 className="animate-spin" />}
             {isShowingGraph && graphData && (
-                <div className="p-4">
-                    <Doughnut  data={graphData} />
-                </div>
+              <div className="p-4">
+                <Doughnut data={graphData} />
+              </div>
             )}
           </div>
           <div className="min-h-60 flex justify-center items-center">

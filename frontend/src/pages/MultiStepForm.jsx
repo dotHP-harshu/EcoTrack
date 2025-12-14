@@ -260,11 +260,11 @@ export default function MultiStepForm() {
         <div
           className="min-h-screen py-12 px-4 transition-all duration-300 hide-bg"
           style={{
-            backgroundColor:`${stepColor.gradStart}`,
+            backgroundColor: `${stepColor.gradStart}`,
             backgroundImage: `url("/images/stepBg/${stepBg}.png") `,
-            backgroundRepeat:"no-repeat",
-            backgroundPosition:"center",
-            backgroundSize:"cover"
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
           }}
         >
           <div className="mx-auto">
@@ -383,5 +383,3 @@ export default function MultiStepForm() {
     </FormContext.Provider>
   );
 }
-
-

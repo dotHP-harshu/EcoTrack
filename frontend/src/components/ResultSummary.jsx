@@ -28,9 +28,7 @@ const ResultSummary = ({ footprint, formData }) => {
   const statsRef = useRef(null);
   const imageRef = useRef(null);
   const chartContainerRef = useRef(null);
-  const buttonsRef = useRef(null);
   const [isSavedData, setIsSavedData] = useState(false);
-
 
   const categoryObject = {
     transportEmission: "Transport",
@@ -147,19 +145,22 @@ const ResultSummary = ({ footprint, formData }) => {
         delay: 0.5,
       });
     },
-    
+
     { dependencies: [] }
   );
 
-  
-
-
   return (
     <div className="min-h-screen bg-linear-to-br from-bg-subtle via-bg-base to-bg-muted p-6 max-xs:p-4">
+      <header className="flex justify-center items-center gap-4 py-4">
+        <img src="/images/logo.svg" alt="log" className="w-20 h-auto" />
+        <h1 className="text-xl font-bold font-bulter text-accent">
+          Eco<span className="text-primary">Track</span>
+        </h1>
+      </header>
       {/* Hero Section with enhanced styling */}
       <div className="w-full max-w-7xl mx-auto">
         <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl shadow-shadow overflow-hidden border border-border/20 mb-8">
-          <div className="w-full h-fit grid grid-cols-2 max-sm:grid-cols-1">
+          <div className="w-full h-fit grid grid-cols-2 max-sm:grid-cols-1 bg-[#d8f3e8]">
             <div
               className="flex flex-col items-start justify-center gap-6 px-8 py-12 max-xs:px-6 max-xs:py-8"
               ref={statsRef}
@@ -243,18 +244,12 @@ const ResultSummary = ({ footprint, formData }) => {
       </div>
 
       {/* Enhanced Action Buttons */}
-      <div
-        className="w-full max-w-7xl mx-auto flex justify-center items-center py-8 gap-4 max-xs:flex-col flex-wrap"
-        ref={buttonsRef}
-      >
+      <div className="w-full max-w-7xl mx-auto flex justify-center items-center py-8 gap-4 max-xs:flex-col flex-wrap">
         <button
           onClick={() => setIsShowingTipSection((prev) => !prev)}
           className="relative text-base max-xs:text-sm font-medium px-8 py-3 rounded-xl border-2 border-primary/30 outline-none cursor-pointer transition-all duration-300 hover:border-primary hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 bg-white/80 backdrop-blur-sm overflow-hidden"
         >
-          <span className="relative z-10 text-text-heading  transition-colors duration-300">
-            {!isShowingTipSection ? "Category Breakdown" : "Show Chart"}
-          </span>
-          <div className="absolute inset-0 bg-linear-to-r from-accent/5 to-primary/5  transition-opacity duration-300"></div>
+          {!isShowingTipSection ? "Category Breakdown" : "Show Chart"}
         </button>
 
         <button className=" relative text-base max-xs:text-sm font-medium px-8 py-3 rounded-xl border-2 border-accent/30 outline-none cursor-pointer transition-all duration-300 hover:border-accent hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5 bg-white/80 backdrop-blur-sm overflow-hidden">

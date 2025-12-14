@@ -1,6 +1,5 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import React from "react";
 
 function Intro() {
   useGSAP(() => {
@@ -50,18 +49,19 @@ function Intro() {
           ease: "power2.out",
         },
         "-=0.6"
-      ).to(".intro-page",{
-        y:"-100%",
-        duration:0.8,
-        ease:"expo.inOut",
-        onComplete:()=>{
-            document.querySelector(".intro-page").style.display = "none"
-        }
-      })
+      )
+      .to(".intro-page", {
+        y: "-100%",
+        duration: 0.8,
+        ease: "expo.inOut",
+        onComplete: () => {
+          document.querySelector(".intro-page").style.display = "none";
+        },
+      });
   });
 
   return (
-    <div className="w-dvw h-dvh bg-bg-subtle fixed top-0 left-0 flex justify-center items-center z-50 intro-page" >
+    <div className="w-dvw h-dvh bg-bg-subtle fixed top-0 left-0 flex justify-center items-center z-50 intro-page">
       <div className="relative">
         {/* SVG logo */}
         <div className="logo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[10]">

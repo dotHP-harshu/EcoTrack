@@ -10,7 +10,6 @@ const icons = {
   waterEmission: <Droplet size={32} className="text-cyan-700" />,
 };
 
-
 function TipCard({ tipObject, formData }) {
   const [isShowingTip, setIsShowingTip] = useState(true);
 
@@ -58,7 +57,7 @@ function TipCard({ tipObject, formData }) {
 
       <hr className="border-2" />
 
-      <div className="relative h-[160px] overflow-hidden">
+      <div className="relative h-40 overflow-hidden">
         <div
           className={`absolute inset-0 transition-all duration-500 ease-in-out ${
             isShowingTip

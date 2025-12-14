@@ -1,21 +1,11 @@
-const Groq = require("groq-sdk")
+const OpenAi = require("openai");
 const { sendSuccess, sendError } = require("../utils/resFormatter");
 const aiTipModel = require("../models/aiTip.model");
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
-async function getGroqChatCompletion(prompt) {
-  return groq.chat.completions.create({
-    messages: [
-      {
-        role: "user",
-        content: prompt,
-      },
-    ],
-    model: "allam-2-7b",
-  });
-}
-
+const openAi = new OpenAi({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 
 const aiSuggestionController = async (req, res) => {
   try {
@@ -24,17 +14,21 @@ const aiSuggestionController = async (req, res) => {
       const savedTip = await aiTipModel.findOne({ cfhId });
 
       if (savedTip) {
-        return sendSuccess(res, true, 200, "Successfull get ai tip. from saved tip", savedTip);
+        return sendSuccess(
+          res,
+          true,
+          200,
+          "Successfull get ai tip. from saved tip",
+          savedTip
+        );
       }
     }
 
     const { totalEmission, categoryEmission, categoryBreakdown, categoryTips } =
       req.body;
 
-    const prompt =`
+    const prompt = `
           ---
-
-          ## **✨ Refined Prompt (Use This Version)**
 
           You are an expert environmental analyst who explains carbon footprint data in a simple, engaging, human-friendly way.
           Use emojis where helpful, keep sentences short, and avoid long paragraphs.
@@ -103,10 +97,15 @@ const aiSuggestionController = async (req, res) => {
 
     `;
 
-    const chatCompletion = await getGroqChatCompletion(prompt)
+    const completion = await openAi.chat.completions.create({
+      model: "google/gemma-3-27b-it:free",
+      messages: [{ role: "user", content: prompt }],
+    });
 
-
-    const aiTip = await aiTipModel.create({ tipText: chatCompletion.choices[0]?.message?.content || "", cfhId });
+    const aiTip = await aiTipModel.create({
+      tipText: completion.choices[0].message.content || "",
+      cfhId,
+    });
 
     sendSuccess(res, true, 200, "Successfull ai response from ai", aiTip);
   } catch (error) {
